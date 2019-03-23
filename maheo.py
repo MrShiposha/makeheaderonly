@@ -242,7 +242,7 @@ def get_license_comment():
         license_text = license.read()
     license_lines = license_text.split('\n')
     for i in range(len(license_lines)):
-        license_lines[i] = "// " + license_lines[i]
+        license_lines[i] = "// " + license_lines[i] + '\n'
     return license_lines + ['\n']
 
 
