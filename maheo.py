@@ -290,7 +290,7 @@ if __name__ == "__main__":
 
     headers[main_header].process() # process all
 
-    library_name = os.path.basename(sys.argv[1]).upper()
+    library_name = os.path.basename(sys.argv[3]).upper()
     library_name = library_name[:library_name.index('.')]
 
     _, ext = os.path.splitext(output_header)
