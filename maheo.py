@@ -27,6 +27,12 @@ def trim_list(l: list):
 filepath_re = r'([A-Za-z]:(\\|/))?((\w|\.)+((\\|/)(\w|\.)+)*)' if platform.system() == 'Windows' \
          else r'/?((\w|\.)+((\\|/)(\w|\.)+)*)'
 
+def get_full_path(filepath: str):
+    if os.path.isabs(filepath):
+        return filepath
+    else:
+        return os.path.abspath(os.path.join(global_prefix, filepath))
+
 def is_system_include(string: str):
     return bool(re.match(r'( )*#( )*include( )+<{}>'.format(filepath_re), string))
 
@@ -34,7 +40,9 @@ def is_local_include(string: str):
     return bool(re.match(r'( )*#( )*include( )+"{}"'.format(filepath_re), string))
 
 def extract_filepath(include: str):
-    return trim(re.sub(r'( )*#( )*include( )+', '', include).replace('"', ''))
+    return get_full_path(
+        trim(re.sub(r'( )*#( )*include( )+', '', include).replace('"', ''))
+    )
 
 def is_pargma_once(string: str):
     return bool(re.match(r'#( )*pragma( )+once', string))
@@ -71,12 +79,6 @@ system_headers = []
 headers = {}
 
 is_errors = False
-
-def get_full_path(filepath: str):
-    if os.path.isabs(filepath):
-        return filepath
-    else:
-        return os.path.abspath(os.path.join(global_prefix, filepath))
 
 class Header:
     def __init__(self, filepath: str):
